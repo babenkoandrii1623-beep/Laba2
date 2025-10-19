@@ -2,8 +2,6 @@
 <html>
 <head>
   <title>Pleasant Cafe</title>
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <link href="style.css" rel="stylesheet">
   <script src="https://polyfill.io/v3/polyfill.min.js"></script>
 </head>
@@ -19,20 +17,47 @@
 
   <div class="main-img"></div>
 
-  <!-- Кнопка перемикання теми -->
+  <!-- Перемикач теми -->
   <div class="theme-toggle">
     <button id="theme-btn">Змінити тему</button>
   </div>
 
+  <!-- Реактивне привітання -->
+  <div class="greeting-container">
+    <label for="nameInput">Введіть своє ім’я:</label><br>
+    <input type="text" id="nameInput" placeholder="Ваше ім’я">
+    <p id="greeting"></p>
+  </div>
+
+  <!-- Форма для коментарів -->
+  <div class="comment-section">
+    <h2>Залиште коментар</h2>
+    <input type="text" id="commentName" placeholder="Ваше ім’я">
+    <textarea id="commentText" placeholder="Ваш коментар"></textarea>
+    <button id="addCommentBtn">Додати</button>
+    <div id="commentsContainer"></div>
+  </div>
+
+  <!-- Динамічне завантаження HTML -->
+  <div class="load-section">
+    <h2>Динамічне завантаження контенту</h2>
+    <button id="loadDataBtn">Завантажити дані</button>
+    <div id="dataContainer"></div>
+  </div>
+
+  <!-- Динамічне завантаження JSON -->
+  <div class="load-json-section">
+    <h2>Динамічне завантаження структурованих даних</h2>
+    <button id="loadJsonBtn">Завантажити JSON</button>
+    <div id="jsonContainer"></div>
+  </div>
+
   <script>
+    // ===== Перемикання теми =====
     const btn = document.getElementById('theme-btn');
     const body = document.body;
-
-    // Якщо є збережена тема, застосовуємо її
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      body.className = savedTheme;
-    }
+    if (savedTheme) body.className = savedTheme;
 
     btn.addEventListener('click', () => {
       if (body.classList.contains('light-theme')) {
@@ -42,6 +67,64 @@
         body.classList.replace('dark-theme', 'light-theme');
         localStorage.setItem('theme', 'light-theme');
       }
+    });
+
+    // ===== Реактивне привітання =====
+    const nameInput = document.getElementById('nameInput');
+    const greeting = document.getElementById('greeting');
+    nameInput.addEventListener('input', e => {
+      const name = e.target.value.trim();
+      greeting.textContent = name ? `Вітаємо, ${name}!` : '';
+    });
+
+    // ===== Додавання коментарів =====
+    const addCommentBtn = document.getElementById('addCommentBtn');
+    const commentsContainer = document.getElementById('commentsContainer');
+    const commentName = document.getElementById('commentName');
+    const commentText = document.getElementById('commentText');
+    addCommentBtn.addEventListener('click', () => {
+      const name = commentName.value.trim();
+      const text = commentText.value.trim();
+      if (!name || !text) { alert('Будь ласка, заповніть усі поля!'); return; }
+      const div = document.createElement('div'); div.classList.add('comment');
+      const h3 = document.createElement('h3'); h3.textContent = name;
+      const p = document.createElement('p'); p.textContent = text;
+      div.appendChild(h3); div.appendChild(p);
+      commentsContainer.appendChild(div);
+      commentName.value=''; commentText.value='';
+    });
+
+    // ===== Динамічне завантаження HTML =====
+    const loadDataBtn = document.getElementById('loadDataBtn');
+    const dataContainer = document.getElementById('dataContainer');
+    const htmlUrl = 'https://web2025-test-data.ikto.net/autumn-note.html';
+    loadDataBtn.addEventListener('click', () => {
+      dataContainer.innerHTML = 'Завантаження...';
+      fetch(htmlUrl)
+        .then(res => { if(!res.ok) throw new Error('Помилка'); return res.text(); })
+        .then(data => { dataContainer.innerHTML = data; })
+        .catch(()=> { dataContainer.innerHTML='<p style="color:red;">Не вдалося завантажити дані</p>'; });
+    });
+
+    // ===== Динамічне завантаження JSON =====
+    const loadJsonBtn = document.getElementById('loadJsonBtn');
+    const jsonContainer = document.getElementById('jsonContainer');
+    const jsonUrl = 'https://web2025-test-data.ikto.net/comments.json';
+    loadJsonBtn.addEventListener('click', () => {
+      jsonContainer.innerHTML = 'Завантаження...';
+      fetch(jsonUrl)
+        .then(res => { if(!res.ok) throw new Error('Помилка'); return res.json(); })
+        .then(data => {
+          jsonContainer.innerHTML='';
+          data.forEach(item => {
+            const div = document.createElement('div'); div.classList.add('json-item');
+            const h3 = document.createElement('h3'); h3.textContent = item.name || 'Без імені';
+            const p = document.createElement('p'); p.textContent = item.comment || item.text || JSON.stringify(item);
+            div.appendChild(h3); div.appendChild(p);
+            jsonContainer.appendChild(div);
+          });
+        })
+        .catch(()=>{ jsonContainer.innerHTML='<p style="color:red;">Не вдалося завантажити дані</p>'; });
     });
   </script>
 </body>
