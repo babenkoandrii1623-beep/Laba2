@@ -1,15 +1,28 @@
-html{
-	height: 100%;
+html {
+  height: 100%;
   overflow-x: hidden;
 }
 
-body{
-	height: 100%;
-	margin: 0px;
-	font-family: 'Roboto', sans-serif;
+body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-.header{
+/* 🌞 Світла тема */
+.light-theme {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* 🌙 Темна тема */
+.dark-theme {
+  background-color: #1a1a1a;
+  color: #f0f0f0;
+}
+
+.header {
   font-size: 24px;
   font-weight: 300;
   text-align: center;
@@ -17,28 +30,29 @@ body{
   margin: auto;
 }
 
-#title{
-	font-size: 62px;
+#title {
+  font-size: 62px;
 }
 
-ul{
+ul {
   list-style: none;
+  padding: 0;
 }
 
-li:hover{
-	cursor: pointer;
-	background: chocolate;
-	color: beige;
+li:hover {
+  cursor: pointer;
+  background: chocolate;
+  color: beige;
 }
 
-strong{
-	color: chocolate;
+strong {
+  color: chocolate;
   font-weight: bold;
   background: url('flowers.jpg');
   background-size: cover;
-	background-clip: text;
+  background-clip: text;
   -webkit-background-clip: text;
-	color: transparent;
+  color: transparent;
 }
 
 .main-img {
@@ -51,4 +65,25 @@ strong{
   align-items: center;
   display: flex;
   justify-content: center;
+}
+
+/* Кнопка перемикання теми */
+.theme-toggle {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+#theme-btn {
+  background-color: chocolate;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#theme-btn:hover {
+  background-color: peru;
 }
